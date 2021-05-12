@@ -57,22 +57,36 @@ form.first.addEventListener("change", function () {
 
 const validateFirst = function (inputFirstName) {
   //Création de la RegExp pour valider le prénom
-  let regexFirst = new RegExp("^[a-zA-Z-]+$", "g");
+  let regexFirst = new RegExp(
+    "^[a-zA-Z-àâçéèêëìíîïñòóôöùúûüýÿÀÁÂÇÈÉÊËÌÍÎÏÑÒÓÔÙÚÛÜÝŸ]+$",
+    "g"
+  );
 
   // Modification du texte sous le champs Prénom
-  let smallText = inputFirstName.nextElementSibling;
+  let smallFirst = inputFirstName.nextElementSibling;
 
+  // Au minimum 2 caracteres
+  if (inputFirstName.value.length < 3) {
+    smallFirst.innerHTML = "Veuillez saisir au minimum 2 caractères";
+    smallFirst.classList.add("danger");
+  }
   // Testing de la valeur saisie dans le champs Prénom
-  if (regexFirst.test(inputFirstName.value)) {
-    smallText.classList.remove("danger");
-    smallText.innerHTML = "";
+  else if (regexFirst.test(inputFirstName.value)) {
+    smallFirst.classList.remove("danger");
+    smallFirst.innerHTML = "";
   } else {
-    smallText.innerHTML = "Veuillez saisir une autre valeur";
-    smallText.classList.add("danger");
+    smallFirst.innerHTML = "Veuillez saisir une autre valeur";
+    smallFirst.classList.add("danger");
   }
 };
 
+//************Validation Nom **********************//
+
 // Ecoute de la modification de l'élément Nom
 form.last.addEventListener("change", function () {
-  validateFirst(this);
+  validateLast(this);
 });
+
+const validateLast = function (inputLastName) {
+  //Création de la RegExp pour valider le Nom
+};
