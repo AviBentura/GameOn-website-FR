@@ -65,8 +65,12 @@ const validateFirst = function (inputFirstName) {
   // Modification du texte sous le champs Prénom
   let smallFirst = inputFirstName.nextElementSibling;
 
+  if (inputFirstName.value === "") {
+    smallFirst.classList.add("danger");
+    smallFirst.innerHTML = "Veuillez saisir une valeur";
+  }
   // Au minimum 3 caracteres
-  if (inputFirstName.value.length < 3) {
+  else if (inputFirstName.value.length < 3) {
     smallFirst.innerHTML = "Veuillez saisir au minimum 3 caractères";
     // Ajout de la class "danger"
     smallFirst.classList.add("danger");
@@ -103,8 +107,12 @@ const validateLast = function (inputLastName) {
   // Modification du texte sous le champs Nom
   let smallLast = inputLastName.nextElementSibling;
 
+  if (inputLastName.value === "") {
+    smallLast.classList.add("danger");
+    smallLast.innerHTML = "Veuillez saisir une valeur";
+  }
   // Au minimum 4 caracteres
-  if (inputLastName.value.length < 4) {
+  else if (inputLastName.value.length < 4) {
     smallLast.innerHTML = "Veuillez saisir au minimum 4 caractères";
     // Ajout de la class "danger"
     smallLast.classList.add("danger");
@@ -141,8 +149,13 @@ const validateEmail = function (inputEmail) {
   // Modification du texte sous le champs de saisie E-mail
   let smallEmail = inputEmail.nextElementSibling;
 
+  if (inputEmail.value === "") {
+    smallEmail.classList.remove("success");
+    smallEmail.classList.add("danger");
+    smallEmail.innerHTML = "Veuillez saisir une valeur";
+  }
   // Testing de la valeur saisie dans le champs Prénom
-  if (regexEmail.test(inputEmail.value)) {
+  else if (regexEmail.test(inputEmail.value)) {
     smallEmail.classList.remove("danger");
     smallEmail.classList.add("success");
     smallEmail.innerHTML = "Adresse e-mail valide";
