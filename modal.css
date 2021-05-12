@@ -206,6 +206,9 @@ input {
 .danger {
   color: #f00;
 }
+.success {
+  color: #008000;
+}
 .text-control {
   margin: 0;
   padding: 8px;
