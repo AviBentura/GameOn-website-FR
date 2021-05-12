@@ -15,9 +15,9 @@ const editNav = () => {
 
 const modalbg = document.querySelector(".bground");
 
-// Variables bouton "je m'inscrit"
+// Variable bouton "je m'inscrit"
 const modalBtn = document.querySelectorAll(".modal-btn");
-
+// Variable attaché à la classe des champs du formulaire
 const formData = document.querySelectorAll(".formData");
 
 // Variables de fermeture de la modal
@@ -42,3 +42,37 @@ function launchModal() {
 function closeModal() {
   modalbg.style.display = "none";
 }
+
+//************Validation Prénom **********************//
+
+// conditions de remplissage du formulaire
+let form = document.querySelector("#form-registration");
+
+console.log(form.first);
+
+// Ecoute de la modification de l'élément Prénom
+form.first.addEventListener("change", function () {
+  validateFirst(this);
+});
+
+const validateFirst = function (inputFirstName) {
+  //Création de la RegExp pour valider le prénom
+  let regexFirst = new RegExp("^[a-zA-Z-]+$", "g");
+
+  // Modification du texte sous le champs Prénom
+  let smallText = inputFirstName.nextElementSibling;
+
+  // Testing de la valeur saisie dans le champs Prénom
+  if (regexFirst.test(inputFirstName.value)) {
+    smallText.classList.remove("danger");
+    smallText.innerHTML = "";
+  } else {
+    smallText.innerHTML = "Veuillez saisir une autre valeur";
+    smallText.classList.add("danger");
+  }
+};
+
+// Ecoute de la modification de l'élément Nom
+form.last.addEventListener("change", function () {
+  validateFirst(this);
+});

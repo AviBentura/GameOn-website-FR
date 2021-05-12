@@ -203,6 +203,9 @@ input {
   border: 0.8px solid #ccc;
   outline: none;
 }
+.danger {
+  color: #f00;
+}
 .text-control {
   margin: 0;
   padding: 8px;
