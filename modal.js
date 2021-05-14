@@ -149,12 +149,13 @@ const validateEmail = function (inputEmail) {
   // Modification du texte sous le champs de saisie E-mail
   let smallEmail = inputEmail.nextElementSibling;
 
+  // Si aucune valeur n'est saisie
   if (inputEmail.value === "") {
     smallEmail.classList.remove("success");
     smallEmail.classList.add("danger");
     smallEmail.innerHTML = "Veuillez saisir une valeur";
   }
-  // Testing de la valeur saisie dans le champs Prénom
+  // Testing de la valeur saisie dans le champs Email
   else if (regexEmail.test(inputEmail.value)) {
     smallEmail.classList.remove("danger");
     smallEmail.classList.add("success");
@@ -165,3 +166,45 @@ const validateEmail = function (inputEmail) {
     smallEmail.innerHTML = "Adresse e-mail non valide";
   }
 };
+
+//***************DATE DE NAISSANCE********************//
+
+// Ecoute de la modification de l'élément Date de Naissance
+form.birthdate.addEventListener("change", function () {
+  validateBirth(this);
+});
+
+const validateBirth = function (inputBirth) {
+  // Création de la variable qui récupère la date
+  let born = new Date(inputBirth.value);
+
+  // Extrait des composants de la date
+  // Notamment l'année de naissance
+  let year = born.getFullYear();
+
+  // Modification du texte sous le champs date de naissance
+  let smallBirthday = inputBirth.nextElementSibling;
+
+  // Verification si la valeur n'existe pas
+  if (year > 2003 || year < 1930) {
+    smallBirthday.classList.remove("success");
+    smallBirthday.classList.add("danger");
+    smallBirthday.innerHTML = "Veuillez saisir votre date de naissance";
+  } else {
+    smallBirthday.classList.remove("danger");
+    smallBirthday.classList.add("success");
+    smallBirthday.innerHTML = "Date de naissance valide";
+  }
+};
+
+let message = document.querySelectorAll("small");
+
+let parentModal = document.querySelector(".modal-body");
+
+parentModal.addEventListener("click", function () {
+  if (message.value !== "") {
+    message.remove;
+  } else {
+    console.log(message);
+  }
+});
