@@ -167,6 +167,12 @@ const validateEmail = function (inputEmail) {
   }
 };
 
+const filledEmail = email.nextElementSibling;
+
+email.addEventListener("focusout", function () {
+  filledEmail.textContent = "";
+});
+
 //***************DATE DE NAISSANCE********************//
 
 // Ecoute de la modification de l'élément Date de Naissance
@@ -197,14 +203,47 @@ const validateBirth = function (inputBirth) {
   }
 };
 
-let message = document.querySelectorAll("small");
+// On vise la balise HTML "small" dans une variable
+const filledBirthday = birthdate.nextElementSibling;
 
-let parentModal = document.querySelector(".modal-body");
+// On crée une écoute "focusout" et éxecute une fonction à réaliser sur le champs date de naissance
+birthdate.addEventListener("focusout", function () {
+  // On remplace le texte dans la balise "small"
+  filledBirthday.textContent = "";
+});
 
-parentModal.addEventListener("click", function () {
-  if (message.value !== "") {
-    message.remove;
+//***************NOMBRE DE TOURNOIS******************//
+
+// Ecoute de la modification de l'élément Date de Naissance
+form.birthdate.addEventListener("change", function () {
+  validateBirth(this);
+});
+
+const validateBirth = function (inputBirth) {
+  // Création de la variable qui récupère la date
+  let born = new Date(inputBirth.value);
+
+  // Extrait des composants de la date
+  // Notamment l'année de naissance
+  let year = born.getFullYear();
+
+  // Modification du texte sous le champs date de naissance
+  let smallBirthday = inputBirth.nextElementSibling;
+
+  // Verification si la valeur n'existe pas
+  if (year > 2003 || year < 1930) {
+    smallBirthday.classList.remove("success");
+    smallBirthday.classList.add("danger");
+    smallBirthday.innerHTML = "Veuillez saisir votre date de naissance";
   } else {
-    console.log(message);
+    smallBirthday.classList.remove("danger");
+    smallBirthday.classList.add("success");
+    smallBirthday.innerHTML = "Date de naissance valide";
   }
+};
+
+const filledBirthday = birthdate.nextElementSibling;
+
+birthdate.addEventListener("focusout", function () {
+  filledBirthday.textContent = "";
 });
