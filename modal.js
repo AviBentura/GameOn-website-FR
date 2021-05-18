@@ -48,8 +48,6 @@ function closeModal() {
 // conditions de remplissage du formulaire
 let form = document.querySelector("#form-registration");
 
-console.log(form.first);
-
 // Ecoute de la modification de l'élément Prénom
 form.first.addEventListener("change", function () {
   validateFirst(this);
@@ -63,30 +61,39 @@ const validateFirst = function (inputFirstName) {
   );
 
   // Modification du texte sous le champs Prénom
-  let smallFirst = inputFirstName.nextElementSibling;
+  // On cible l'élément parent
+  let smallFirst = inputFirstName.parentElement;
 
   if (inputFirstName.value === "") {
-    smallFirst.classList.add("danger");
-    smallFirst.innerHTML = "Veuillez saisir une valeur";
+    // On ajoute a la div parent l'attribut data-error-visible à true pour appeler les propriétés de styles de CSS
+    smallFirst.setAttribute("data-error-visible", "true");
+    // On ajoute également l'attribut data-error avec l'argument qui correspond
+    smallFirst.setAttribute("data-error", "Veuillez saisir une valeur");
   }
   // Au minimum 3 caracteres
   else if (inputFirstName.value.length < 3) {
-    smallFirst.innerHTML = "Veuillez saisir au minimum 3 caractères";
-    // Ajout de la class "danger"
-    smallFirst.classList.add("danger");
+    smallFirst.setAttribute("data-error-visible", "true");
+    smallFirst.setAttribute(
+      "data-error",
+      "Veuillez saisir au minimum 3 caractères"
+    );
     // Au maximum 16 caractères
   } else if (inputFirstName.value.length >= 16) {
-    smallFirst.innerHTML = "Veuillez saisir un prénom plus court";
-    // Ajout de la class "danger"
-    smallFirst.classList.add("danger");
+    smallFirst.setAttribute("data-error-visible", "true");
+    smallFirst.setAttribute(
+      "data-error",
+      "Veuillez saisir un prénom plus court"
+    );
   }
   // Testing de la valeur saisie dans le champs Prénom
   else if (regexFirst.test(inputFirstName.value)) {
-    smallFirst.classList.remove("danger");
-    smallFirst.innerHTML = "";
+    // Si la valeur passe le test de regex alors les attributs ajoutés précedement sont retirés
+    smallFirst.removeAttribute("data-error-visible");
+    smallFirst.removeAttribute("data-error");
   } else {
-    smallFirst.innerHTML = "Veuillez saisir une autre valeur";
-    smallFirst.classList.add("danger");
+    // Si la valeur ne passe pas le test de la regex
+    smallFirst.setAttribute("data-error-visible", "true");
+    smallFirst.setAttribute("data-error", "Veuillez saisir une autre valeur");
   }
 };
 
@@ -105,30 +112,31 @@ const validateLast = function (inputLastName) {
   );
 
   // Modification du texte sous le champs Nom
-  let smallLast = inputLastName.nextElementSibling;
+  let smallLast = inputLastName.parentElement;
 
   if (inputLastName.value === "") {
-    smallLast.classList.add("danger");
-    smallLast.innerHTML = "Veuillez saisir une valeur";
+    smallLast.setAttribute("data-error-visible", "true");
+    smallLast.setAttribute("data-error", "Veuillez saisir une valeur");
   }
   // Au minimum 4 caracteres
   else if (inputLastName.value.length < 4) {
-    smallLast.innerHTML = "Veuillez saisir au minimum 4 caractères";
-    // Ajout de la class "danger"
-    smallLast.classList.add("danger");
+    smallLast.setAttribute("data-error-visible", "true");
+    smallLast.setAttribute(
+      "data-error",
+      "Veuillez saisir au minimum 4 caractères"
+    );
   } // Au maximum 16 caractères
   else if (inputLastName.value.length >= 16) {
-    smallLast.innerHTML = "Veuillez saisir un nom plus court";
-    // Ajout de la class "danger"
-    smallLast.classList.add("danger");
+    smallLast.setAttribute("data-error-visible", "true");
+    smallLast.setAttribute("data-error", "Veuillez saisir un nom plus court");
   }
   // Testing de la valeur saisie dans le champs Prénom
   else if (regexLast.test(inputLastName.value)) {
-    smallLast.classList.remove("danger");
-    smallLast.innerHTML = "";
+    smallLast.removeAttribute("data-error-visible");
+    smallLast.removeAttribute("data-error");
   } else {
-    smallLast.innerHTML = "Veuillez saisir votre nom";
-    smallLast.classList.add("danger");
+    smallLast.setAttribute("data-error-visible", "true");
+    smallLast.setAttribute("data-error", "Veuillez saisir votre nom");
   }
 };
 
@@ -147,30 +155,32 @@ const validateEmail = function (inputEmail) {
   );
 
   // Modification du texte sous le champs de saisie E-mail
-  let smallEmail = inputEmail.nextElementSibling;
+  let smallEmail = inputEmail.parentElement;
 
   // Si aucune valeur n'est saisie
   if (inputEmail.value === "") {
-    smallEmail.classList.remove("success");
-    smallEmail.classList.add("danger");
-    smallEmail.innerHTML = "Veuillez saisir une valeur";
+    smallEmail.setAttribute("data-error-visible", "true");
+    smallEmail.setAttribute("data-error", "Veuillez saisir une valeur");
   }
   // Testing de la valeur saisie dans le champs Email
   else if (regexEmail.test(inputEmail.value)) {
-    smallEmail.classList.remove("danger");
-    smallEmail.classList.add("success");
-    smallEmail.innerHTML = "Adresse e-mail valide";
+    smallEmail.removeAttribute("data-error-visible");
+    smallEmail.setAttribute("data-error-visible", "false");
+    smallEmail.setAttribute("data-error", "Adresse e-mail valide");
   } else {
-    smallEmail.classList.remove("success");
-    smallEmail.classList.add("danger");
-    smallEmail.innerHTML = "Adresse e-mail non valide";
+    smallEmail.removeAttribute("data-error-visible");
+    smallEmail.setAttribute("data-error-visible", "true");
+    smallEmail.setAttribute("data-error", "Adresse e-mail non valide");
   }
 };
 
-const filledEmail = email.nextElementSibling;
+const filledEmail = email.parentElement;
 
 email.addEventListener("focusout", function () {
-  filledEmail.textContent = "";
+  setTimeout(function () {
+    filledEmail.removeAttribute("data-error-visible");
+    filledEmail.setAttribute("data-error", "");
+  }, 3000);
 });
 
 //***************DATE DE NAISSANCE********************//
@@ -187,63 +197,76 @@ const validateBirth = function (inputBirth) {
   // Extrait des composants de la date
   // Notamment l'année de naissance
   let year = born.getFullYear();
+  let month = born.getMonth() + 1;
+  let day = born.getDate();
 
   // Modification du texte sous le champs date de naissance
-  let smallBirthday = inputBirth.nextElementSibling;
+  let smallBirthday = inputBirth.parentElement;
 
   // Verification si la valeur n'existe pas
   if (year > 2003 || year < 1930) {
-    smallBirthday.classList.remove("success");
-    smallBirthday.classList.add("danger");
-    smallBirthday.innerHTML = "Veuillez saisir votre date de naissance";
+    smallBirthday.setAttribute("data-error-visible", "true");
+    smallBirthday.setAttribute(
+      "data-error",
+      "Veuillez saisir votre date de naissance"
+    );
+  } else if (born == getDay + "/" + getMonth + "/" + "aaaa") {
+    smallBirthday.setAttribute("data-error-visible", "true");
+    smallBirthday.setAttribute(
+      "data-error",
+      "Veuillez saisir votre année de naissance"
+    );
   } else {
-    smallBirthday.classList.remove("danger");
-    smallBirthday.classList.add("success");
-    smallBirthday.innerHTML = "Date de naissance valide";
+    smallBirthday.setAttribute("data-error-visible", "false");
+    smallBirthday.setAttribute("data-error", "Date de naissance valide");
   }
 };
 
 // On vise la balise HTML "small" dans une variable
-const filledBirthday = birthdate.nextElementSibling;
+const filledBirthday = birthdate.parentElement;
 
 // On crée une écoute "focusout" et éxecute une fonction à réaliser sur le champs date de naissance
 birthdate.addEventListener("focusout", function () {
-  // On remplace le texte dans la balise "small"
-  filledBirthday.textContent = "";
+  setTimeout(function () {
+    filledBirthday.removeAttribute("data-error-visible");
+    filledBirthday.setAttribute("data-error", "");
+  }, 3000);
 });
 
 //***************NOMBRE DE TOURNOIS******************//
 
-// Ecoute de la modification de l'élément Date de Naissance
-form.birthdate.addEventListener("change", function () {
-  validateBirth(this);
+// Ecoute de la modification sur le champs "nombre de tournois"
+form.quantity.addEventListener("change", function () {
+  validateTournament(this);
 });
 
-const validateBirth = function (inputBirth) {
-  // Création de la variable qui récupère la date
-  let born = new Date(inputBirth.value);
-
-  // Extrait des composants de la date
-  // Notamment l'année de naissance
-  let year = born.getFullYear();
-
+const validateTournament = function (inputNumber) {
   // Modification du texte sous le champs date de naissance
-  let smallBirthday = inputBirth.nextElementSibling;
+  let smallTournament = inputNumber.parentElement;
 
   // Verification si la valeur n'existe pas
-  if (year > 2003 || year < 1930) {
-    smallBirthday.classList.remove("success");
-    smallBirthday.classList.add("danger");
-    smallBirthday.innerHTML = "Veuillez saisir votre date de naissance";
+  if (inputNumber.value === "") {
+    smallTournament.setAttribute("data-error-visible", "true");
+    smallTournament.setAttribute("data-error", "veuillez saisir une valeur");
+    // Vérification si la valeur est négative
+  } else if (inputNumber.value < 0) {
+    smallTournament.setAttribute("data-error-visible", "true");
+    smallTournament.setAttribute(
+      "data-error",
+      "veuillez saisir une valeur positive"
+    );
+    // Vérification si la valeur est supérrieur à 99 tournois
+  } else if (inputNumber.value > 99) {
+    smallTournament.setAttribute("data-error-visible", "true");
+    smallTournament.setAttribute(
+      "data-error",
+      "veuillez saisir une valeur inférieur"
+    );
+    // Si aucune des conditions remplie, retirer les propriétés CSS data-error et data-error-visible
   } else {
-    smallBirthday.classList.remove("danger");
-    smallBirthday.classList.add("success");
-    smallBirthday.innerHTML = "Date de naissance valide";
+    smallTournament.removeAttribute("data-error-visible");
+    smallTournament.removeAttribute("data-error");
   }
 };
 
-const filledBirthday = birthdate.nextElementSibling;
-
-birthdate.addEventListener("focusout", function () {
-  filledBirthday.textContent = "";
-});
+//************CHECKBOX LIEUX DES TOURNOIS***********//
