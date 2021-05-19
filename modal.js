@@ -244,6 +244,12 @@ const validateTournament = function (inputNumber) {
   // Modification du texte sous le champs date de naissance
   let smallTournament = inputNumber.parentElement;
 
+  // Création de la variable qui récupère l'élément 'div' des checkbox ville
+  let checkboxT = document.getElementById("checkbox");
+
+  // Création de la variable qui récupère l'élément le paragraphe 'Quelles villes'
+  let pCheckbox = document.querySelector("p.text-label");
+
   // Verification si la valeur n'existe pas
   if (inputNumber.value === "") {
     smallTournament.setAttribute("data-error-visible", "true");
@@ -255,8 +261,26 @@ const validateTournament = function (inputNumber) {
       "data-error",
       "veuillez saisir une valeur positive"
     );
+
+    checkboxT.classList.remove("switchOff");
+    pCheckbox.classList.remove("switchOff");
     // Vérification si la valeur est supérrieur à 99 tournois
+  } else if (inputNumber.value === "0") {
+    // Ajout de la classe 'switchOff' à la div parent qui contient le choix des villes
+    checkboxT.classList.add("switchOff");
+    // Ajout de la classe 'switchOff' au paragraphe qui contient le texte 'Quelles villes'
+    pCheckbox.classList.add("switchOff");
+
+    smallTournament.removeAttribute("data-error-visible");
+    smallTournament.removeAttribute("data-error");
+    // Si la valeur est supérieur à 99
   } else if (inputNumber.value > 99) {
+    // Suppression de la classe 'switchOff' de l'élément div
+    checkboxT.classList.remove("switchOff");
+    // Suppression de la classe 'switchOff' du paragraphe qui contient le texte
+    pCheckbox.classList.remove("switchOff");
+
+    // Ajout des attributs 'data-error' et 'data-error-visible'
     smallTournament.setAttribute("data-error-visible", "true");
     smallTournament.setAttribute(
       "data-error",
@@ -264,9 +288,18 @@ const validateTournament = function (inputNumber) {
     );
     // Si aucune des conditions remplie, retirer les propriétés CSS data-error et data-error-visible
   } else {
+    checkboxT.classList.remove("switchOff");
+    pCheckbox.classList.remove("switchOff");
     smallTournament.removeAttribute("data-error-visible");
     smallTournament.removeAttribute("data-error");
   }
 };
 
 //************CHECKBOX LIEUX DES TOURNOIS***********//
+
+// Ecoute de la modification sur le champs "nombre de tournois"
+/*document.getElementById("checkbox").click = function (e) {
+  if (validateTournament === true) {
+    console.log("c'est faut");
+  }
+};*/

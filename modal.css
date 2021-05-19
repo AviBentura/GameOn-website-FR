@@ -232,15 +232,33 @@ input {
 .formData[data-error-visible="true"]::after {
   opacity: 1;
 }
+.formData[data-error-visible="false"]::after {
+  opacity: 1;
+  color: rgb(4, 134, 4);
+}
 .formData[data-error-visible="true"] .text-control {
   border: 2px solid #e54858;
 }
-/* 
+.formData[data-error-visible="false"] .text-control {
+  border: 2px solid rgb(4, 134, 4);
+}
+.switchOff {
+  opacity: 0;
+  height: 20px;
+}
+.space {
+  margin-top: -35px;
+}
+/*input::after {
+  content: attr(data-error);
+  font-size: 0.4em;
+  color: red;
+}
 input[data-error]::after {
-    content: attr(data-error);
-    font-size: 0.4em;
-    color: red;
-} */
+  content: attr(data-error);
+  font-size: 0.4em;
+  color: green;
+}*/
 .checkbox-label,
 .checkbox2-label {
   position: relative;
