@@ -70,12 +70,12 @@ const validateFirst = function (inputFirstName) {
     // On ajoute également l'attribut data-error avec l'argument qui correspond
     smallFirst.setAttribute("data-error", "Veuillez saisir une valeur");
   }
-  // Au minimum 3 caracteres
-  else if (inputFirstName.value.length < 3) {
+  // Au minimum 2 caracteres
+  else if (inputFirstName.value.length < 2) {
     smallFirst.setAttribute("data-error-visible", "true");
     smallFirst.setAttribute(
       "data-error",
-      "Veuillez saisir au minimum 3 caractères"
+      "Veuillez saisir au minimum 2 caractères"
     );
     // Au maximum 16 caractères
   } else if (inputFirstName.value.length >= 16) {
@@ -107,7 +107,7 @@ form.last.addEventListener("change", function () {
 const validateLast = function (inputLastName) {
   //Création de la RegExp pour valider le Nom
   let regexLast = new RegExp(
-    "^[a-zA-ZàâçéèêëìíîïñòóôöùúûüýÿÀÁÂÇÈÉÊËÌÍÎÏÑÒÓÔÙÚÛÜÝŸ]+$",
+    "^[a-zA-Z 'àâçéèêëìíîïñòóôöùúûüýÿÀÁÂÇÈÉÊËÌÍÎÏÑÒÓÔÙÚÛÜÝŸ]+$",
     "g"
   );
 
@@ -118,12 +118,12 @@ const validateLast = function (inputLastName) {
     smallLast.setAttribute("data-error-visible", "true");
     smallLast.setAttribute("data-error", "Veuillez saisir une valeur");
   }
-  // Au minimum 4 caracteres
-  else if (inputLastName.value.length < 4) {
+  // Au minimum 2 caracteres
+  else if (inputLastName.value.length < 2) {
     smallLast.setAttribute("data-error-visible", "true");
     smallLast.setAttribute(
       "data-error",
-      "Veuillez saisir au minimum 4 caractères"
+      "Veuillez saisir au minimum 2 caractères"
     );
   } // Au maximum 16 caractères
   else if (inputLastName.value.length >= 16) {
@@ -183,12 +183,21 @@ email.addEventListener("focusout", function () {
   }, 3000);
 });
 
-//***************DATE DE NAISSANCE********************//
+//**************DATE DE NAISSANCE********************//
 
 // Ecoute de la modification de l'élément Date de Naissance
-form.birthdate.addEventListener("change", function () {
+form.birthdate.addEventListener("focusout", function () {
   validateBirth(this);
+
+  // On crée une écoute "focusout" et éxecute une fonction à réaliser sur le champs date de naissance
+  setTimeout(function () {
+    filledBirthday.removeAttribute("data-error-visible");
+    filledBirthday.setAttribute("data-error", "");
+  }, 3000);
 });
+
+// On crée une variable rataché à l'élément parent 'div'
+const filledBirthday = birthdate.parentElement;
 
 const validateBirth = function (inputBirth) {
   // Création de la variable qui récupère la date
@@ -196,42 +205,26 @@ const validateBirth = function (inputBirth) {
 
   // Extrait des composants de la date
   // Notamment l'année de naissance
-  let year = born.getFullYear();
-  let month = born.getMonth() + 1;
   let day = born.getDate();
+  let month = born.getMonth() + 1;
+  let years = born.getFullYear();
 
   // Modification du texte sous le champs date de naissance
   let smallBirthday = inputBirth.parentElement;
 
-  // Verification si la valeur n'existe pas
-  if (year > 2003 || year < 1930) {
-    smallBirthday.setAttribute("data-error-visible", "true");
-    smallBirthday.setAttribute(
-      "data-error",
-      "Veuillez saisir votre date de naissance"
-    );
-  } else if (born == getDay + "/" + getMonth + "/" + "aaaa") {
+  // Verification si la valeur est située entre 1930 et 2003
+  if (years <= 2003 && years >= 1930) {
+    smallBirthday.setAttribute("data-error-visible", "false");
+    smallBirthday.setAttribute("data-error", "Date de naissance valide");
+    // Sinon indiqué qu'il s'agit d'une erreur
+  } else {
     smallBirthday.setAttribute("data-error-visible", "true");
     smallBirthday.setAttribute(
       "data-error",
       "Veuillez saisir votre année de naissance"
     );
-  } else {
-    smallBirthday.setAttribute("data-error-visible", "false");
-    smallBirthday.setAttribute("data-error", "Date de naissance valide");
   }
 };
-
-// On vise la balise HTML "small" dans une variable
-const filledBirthday = birthdate.parentElement;
-
-// On crée une écoute "focusout" et éxecute une fonction à réaliser sur le champs date de naissance
-birthdate.addEventListener("focusout", function () {
-  setTimeout(function () {
-    filledBirthday.removeAttribute("data-error-visible");
-    filledBirthday.setAttribute("data-error", "");
-  }, 3000);
-});
 
 //***************NOMBRE DE TOURNOIS******************//
 
@@ -297,9 +290,56 @@ const validateTournament = function (inputNumber) {
 
 //************CHECKBOX LIEUX DES TOURNOIS***********//
 
-// Ecoute de la modification sur le champs "nombre de tournois"
-/*document.getElementById("checkbox").click = function (e) {
-  if (validateTournament === true) {
-    console.log("c'est faut");
-  }
-};*/
+// Création d'une variable qui regroupe les elements des checkbox
+const checkboxElement = document.querySelectorAll(".checkbox-label");
+
+// Récupération des données de la variables checkboxElement avec une boucle forEach pour appliquer une action à chaque élément
+checkboxElement.forEach((item) => {
+  // Ecoute d'un évenement au click sur chaque élément avec l'exécution d'une fonction
+  item.addEventListener("click", (e) => {
+    // Création de la variable de l'element rataché au span qui permet de séléctionner l'élément visuellement
+    let parentItem = e.target.parentElement;
+    // Création de la variable qui va récuperer l'attribut html for="" de l'élément séléctionné
+    let idItem = parentItem.htmlFor;
+    // Création d'un switch qui va traduire un résultat en fonction de l'élément séléctionné
+    switch (idItem) {
+      case "location1":
+        // Création de la variable rataché à l'élément input qui correspond
+        let id1 = document.getElementById("location1");
+        // Récupération de la valeur rataché à cette Id
+        let valueId1 = id1.value;
+        console.log(valueId1);
+        break;
+      case "location2":
+        let id2 = document.getElementById("location2");
+        let valueId2 = id2.value;
+        console.log(valueId2);
+        break;
+      case "location3":
+        let id3 = document.getElementById("location3");
+        let valueId3 = id3.value;
+        console.log(valueId3);
+        break;
+      case "location4":
+        let id4 = document.getElementById("location4");
+        let valueId4 = id4.value;
+        console.log(valueId4);
+        break;
+      case "location5":
+        let id5 = document.getElementById("location5");
+        let valueId5 = id5.value;
+        console.log(valueId5);
+        break;
+      case "location6":
+        let id6 = document.getElementById("location6");
+        let valueId6 = id6.value;
+        console.log(valueId6);
+        break;
+      // definition de la valeur par default si rien ne ce passe.
+      default:
+        null;
+    }
+  });
+});
+
+//************CHECKBOX LIEUX DES TOURNOIS***********//
