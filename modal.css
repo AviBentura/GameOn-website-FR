@@ -246,9 +246,6 @@ input {
   opacity: 0;
   height: 20px;
 }
-.space {
-  margin-top: -35px;
-}
 /*input::after {
   content: attr(data-error);
   font-size: 0.4em;
