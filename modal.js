@@ -49,7 +49,7 @@ function closeModal() {
 let form = document.querySelector("#form-registration");
 
 // Ecoute de la modification de l'élément Prénom
-form.first.addEventListener("change", function () {
+form.first.addEventListener("input", function () {
   validateFirst(this);
 });
 
@@ -98,22 +98,10 @@ const validateFirst = function (inputFirstName) {
   }
 };
 
-/*first.addEventListener("focusout", function () {
-  if (validateFirst(form.first)) {
-    return false;
-  } else {
-    first.parentElement.setAttribute("data-error-visible", "true");
-    first.parentElement.setAttribute(
-      "data-error",
-      "Veuillez saisir une valeur"
-    );
-  }
-});*/
-
 //************Validation Nom **********************//
 
 // Ecoute de la modification de l'élément Nom
-form.last.addEventListener("change", function () {
+form.last.addEventListener("input", function () {
   validateLast(this);
 });
 
@@ -154,19 +142,10 @@ const validateLast = function (inputLastName) {
   }
 };
 
-/*last.addEventListener("focusout", function () {
-  if (validateLast(form.last)) {
-    return false;
-  } else {
-    last.parentElement.setAttribute("data-error-visible", "true");
-    last.parentElement.setAttribute("data-error", "Veuillez saisir une valeur");
-  }
-});*/
-
 //***************E-MAIL******************************//
 
 // Ecoute de la modification de l'élément E-mail
-form.email.addEventListener("change", function () {
+form.email.addEventListener("input", function () {
   validateEmail(this);
 });
 
@@ -181,7 +160,7 @@ const validateEmail = function (inputEmail) {
   let smallEmail = inputEmail.parentElement;
 
   // Si aucune valeur n'est saisie
-  if (inputEmail.value.trim() == "") {
+  if (inputEmail.value === "") {
     smallEmail.setAttribute("data-error-visible", "true");
     smallEmail.setAttribute("data-error", "Veuillez saisir une valeur");
   }
@@ -200,20 +179,17 @@ const validateEmail = function (inputEmail) {
 
 const filledEmail = email.parentElement;
 
+console.log(filledEmail);
+
 email.addEventListener("focusout", function () {
+  if (!validateEmail.value) {
+    filledEmail.setAttribute("data-error-visible", "true");
+    filledEmail.setAttribute("data-error", "Veuillez saisir une valeur");
+  }
   setTimeout(function () {
     filledEmail.removeAttribute("data-error-visible");
-    filledEmail.setAttribute("data-error", "");
+    filledEmail.removeAttribute("data-error");
   }, 3000);
-  if (validateEmail(form.email)) {
-    return false;
-  } else {
-    email.parentElement.setAttribute("data-error-visible", "true");
-    email.parentElement.setAttribute(
-      "data-error",
-      "Veuillez saisir une valeur"
-    );
-  }
 });
 
 //**************DATE DE NAISSANCE********************//
@@ -263,7 +239,7 @@ const validateBirth = function (inputBirth) {
 //***************NOMBRE DE TOURNOIS******************//
 
 // Ecoute de la modification sur le champs "nombre de tournois"
-form.quantity.addEventListener("change", function () {
+form.quantity.addEventListener("input", function () {
   validateTournament(this);
 });
 
@@ -282,19 +258,10 @@ const validateTournament = function (inputNumber) {
 
   // Verification si la valeur n'existe pas
   if (inputNumber.value === "") {
-    /*smallTournament.setAttribute("data-error-visible", "true");
-    smallTournament.setAttribute("data-error", "veuillez saisir une valeur");*/
-
     checkboxPreview.removeAttribute("data-error-visible");
     checkboxPreview.removeAttribute("data-error");
     // Vérification si la valeur est négative
   } else if (inputNumber.value < 0) {
-    /*smallTournament.setAttribute("data-error-visible", "true");
-    smallTournament.setAttribute(
-      "data-error",
-      "veuillez saisir une valeur positive"
-    );*/
-
     checkboxT.classList.remove("switchOff");
     pCheckbox.classList.remove("switchOff");
 
@@ -307,9 +274,6 @@ const validateTournament = function (inputNumber) {
     // Ajout de la classe 'switchOff' au paragraphe qui contient le texte 'Quelles villes'
     pCheckbox.classList.add("switchOff");
 
-    /*smallTournament.removeAttribute("data-error-visible");
-    smallTournament.removeAttribute("data-error");*/
-
     // Si la valeur est supérieur à 99
   } else if (inputNumber.value > 99) {
     // Suppression de la classe 'switchOff' de l'élément div
@@ -317,12 +281,6 @@ const validateTournament = function (inputNumber) {
     // Suppression de la classe 'switchOff' du paragraphe qui contient le texte
     pCheckbox.classList.remove("switchOff");
 
-    // Ajout des attributs 'data-error' et 'data-error-visible'
-    /*smallTournament.setAttribute("data-error-visible", "true");
-    smallTournament.setAttribute(
-      "data-error",
-      "veuillez saisir une valeur inférieur"
-    );*/
     checkboxPreview.removeAttribute("data-error-visible");
     checkboxPreview.removeAttribute("data-error");
     // Si aucune des conditions remplie, retirer les propriétés CSS data-error et data-error-visible
@@ -373,124 +331,59 @@ quantity.addEventListener("focusout", function () {
 //************CHECKBOX LIEUX DES TOURNOIS***********//
 
 const checkboxElement = document.querySelectorAll(".checkbox-label");
-console.log(checkboxElement);
+
 const checkboxInput = document.getElementById("checkbox");
-console.log(checkboxInput);
+
 const checkboxNext = checkboxInput.nextElementSibling;
-console.log(checkboxNext);
-// Récupération des données de la variables checkboxElement avec une boucle forEach pour appliquer une action à chaque élément
-checkboxElement.forEach((item) => {
-  // Ecoute d'un évenement au click sur chaque élément avec l'exécution d'une fonction
-  item.addEventListener("change", (e) => {
-    // Création d'un switch qui va traduire un résultat en fonction de l'élément séléctionné
-    // Création de la variable de l'element rataché au span qui permet de séléctionner l'élément visuellement
-    const parentItem = e.target.parentElement;
-    // Création de la variable qui va récuperer l'attribut html for="" de l'élément séléctionné
-    const idItem = parentItem.htmlFor;
 
-    // Création d'une variable qui regroupe les elements des checkbox
-
-    function validateCheckbox() {
-      if (checkboxInput !== null) {
-        checkboxInput.removeAttribute("data-error");
-        checkboxInput.removeAttribute("data-error-visible");
-      }
-    }
-    switch (idItem) {
-      case "location1":
-        // Création de la variable rataché à l'élément input qui correspond
-        let locationONe = document.querySelector(
-          'input[type="checkbox"]:checked'
-        );
-        // Récupération de la valeur rataché à cette Id
-        let valueOne = locationONe.value;
-        console.log(valueOne);
-        validateCheckbox();
-        break;
-      case "location2":
-        let id2 = document.getElementById("location2");
-        let valueId2 = id2.value;
-        console.log(valueId2);
-        validateCheckbox();
-        break;
-      case "location3":
-        let id3 = document.getElementById("location3");
-        let valueId3 = id3.value;
-        console.log(valueId3);
-        validateCheckbox();
-        break;
-      case "location4":
-        let id4 = document.getElementById("location4");
-        let valueId4 = id4.value;
-        console.log(valueId4);
-        validateCheckbox();
-        break;
-      case "location5":
-        let id5 = document.getElementById("location5");
-        let valueId5 = id5.value;
-        console.log(valueId5);
-        validateCheckbox();
-        break;
-      case "location6":
-        let id6 = document.getElementById("location6");
-        let valueId6 = id6.value;
-        console.log(valueId6);
-        validateCheckbox();
-        break;
-      // definition de la valeur par default si rien ne ce passe.
-      default:
-        null;
-    }
-  });
+// Récupération des données des elements checkbox à partir d'une fonction et de conditions
+form.addEventListener("click", function () {
+  validateCheck(this);
 });
 
-//***********checkboxInput**************************** */
-/*checkboxInput.addEventListener("", function () {
-  validatePlace(this);
-});
-
-const validatePlace = function (checkboxInput) {
+// Création d'une fonction qui regroupe tout les elements des checkbox
+function validateCheck() {
+  let btnCheck = document.getElementsByClassName("checkbox-input");
+  if (btnCheck[0].checked) {
+    checkboxInput.removeAttribute("data-error");
+    checkboxInput.removeAttribute("data-error-visible");
+  } else if (btnCheck[1].checked) {
+    checkboxInput.removeAttribute("data-error");
+    checkboxInput.removeAttribute("data-error-visible");
+  } else if (btnCheck[2].checked) {
+    checkboxInput.removeAttribute("data-error");
+    checkboxInput.removeAttribute("data-error-visible");
+  } else if (btnCheck[3].checked) {
+    checkboxInput.removeAttribute("data-error");
+    checkboxInput.removeAttribute("data-error-visible");
+  } else if (btnCheck[4].checked) {
+    checkboxInput.removeAttribute("data-error");
+    checkboxInput.removeAttribute("data-error-visible");
+  } else if (btnCheck[5].checked) {
+    checkboxInput.removeAttribute("data-error");
+    checkboxInput.removeAttribute("data-error-visible");
+  } else {
     checkboxInput.setAttribute("data-error-visible", "true");
     checkboxInput.setAttribute("data-error", "Veuillez saisir une valeur");
-};*/
-
-//********* checkboxNext ************************* */
-/*checkboxNext.addEventListener("click", function () {
-  validateCheckbox(this);
-});
-
-const checkboxInputP = checkboxInput.previousElementSibling;
-
-const validateCheckbox = function (checkboxInputP) {
-  if (validatePlace === false) {
-    console.log("eeee");
-  } else {
-    checkboxInputP.setAttribute("data-error-visible", "true");
-    checkboxInputP.setAttribute("data-error", "Veuillez saisir une valeur");
   }
-};*/
+}
+
 //************CHECKBOX CONDITIONS***********//
 
-/*const checkboxIcon = checkboxNext.childNodes[0];
-console.log(checkboxIcon);*/
-
-/*checkboxIcon.addEventListener("click", (e) => {
-  let checkboxParent = e.target.parentElement;
-  if (checkboxParent !== null) {
-    console.log(checkboxParent);
-  }
-});*/
-
-/*form.button.addEventListener("click", function () {
-  validateForms(this);
+checkboxNext.addEventListener("click", function () {
+  validateCheck();
 });
 
-const validateForms = function (btnSubmit) {
-  let btnChecked = btnSubmit.parentElement;
-  console.log(btnChecked);
-};*/
-
+function valideChecked() {
+  const btnChecked = document.getElementById("checkbox1");
+  if (btnChecked.checked) {
+    return true;
+  } else {
+    return false;
+  }
+}
 //******************** C'EST PARTIE *********************************/
+//******************** BOUTON SUBMIT ********************************/
 
 form.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -498,28 +391,25 @@ form.addEventListener("submit", function (e) {
 });
 
 function validate() {
-  if (validateFirst(form.first) && validateLast(form.last)) {
-    console.log("checkboxNext");
+  let error;
+
+  let inputs = document.getElementsByTagName("input");
+
+  if (valideChecked(form.checkbox1) === false) {
+    error = "veuillez accepter les conditions d'utilisation";
+  }
+
+  for (let i = 0; i < inputs.length; i++) {
+    if (!inputs[i].value) {
+      error = "Veuillez renseigner tous les champs";
+      break;
+    }
+  }
+  if (error) {
+    alert(error);
+    return false;
   } else {
-    alert("Veuillez remplir l'intégralité du formulaire l'envoie");
+    alert("Formulaire envoyé !");
+    form.submit();
   }
 }
-
-/*function validate(evenent) {
-  switch (evenent) {
-    case validateFirst(form.first):
-      if (validateFirst(form.first)) {
-        console.log("je");
-      } else {
-        console.log("ke");
-      }
-    case validateLast(form.last):
-      if (validateLast(form.last)) {
-        console.log("be");
-      } else {
-        console.log("le");
-      }
-    default:
-      null;
-  }
-}*/
