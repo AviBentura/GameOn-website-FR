@@ -82,36 +82,51 @@ form.addEventListener("input", function () {
 
 // Ecoute de la modification du champs correspondant au Prénom
 // Ecoute est faite sur la valeur de l'input
+
 form.first.addEventListener("input", function () {
-  // On renvoie vers une fonction
+  // On renvoie vers une fonction qui va éxécuter un fonctionnement définie
+
   validateFirst(this);
 });
 
 const validateFirst = function (inputFirstName) {
-  //Création de la RegExp pour valider le prénom
+  //Création de la RegExp qui va vérifier les valeurs indiquées dans le champs prénom
+
   let regexFirst = new RegExp(
+    // On autorise les éléments en Majuscule
+    // On autorise les éléments en minuscule
+    // On autorise les lettres particulière
+    // On accepte les '-' mais pas les '_' n'y les " ' "
+    // On autorise la saisie de plusieurs fois la meme valeurs avec le ' + '
+    // On effectue une recherche de façon générale avec le ' g ' de la regExp
+
     "^[a-zA-Z-àâçéèêëìíîïñòóôöùúûüýÿÀÁÂÇÈÉÊËÌÍÎÏÑÒÓÔÙÚÛÜÝŸ]+$",
     "g"
   );
 
   // Modification du texte sous le champs Prénom
-  // On cible l'élément parent
+  // On cible l'élément parent pour pouvoir lui assigner des attributs dans certains cas
+  // Avec la variable smallFirst
+
   let smallFirst = inputFirstName.parentElement;
 
-  if (inputFirstName.value === "") {
+  // Si jamais la valeur est inférieur à 2 élément
+  // On récupère cette valeur grace à length
+
+  if (inputFirstName.value.length < 2) {
     // On ajoute a la div parent l'attribut data-error-visible à true pour appeler les propriétés de styles de CSS
+
     smallFirst.setAttribute("data-error-visible", "true");
-    // On ajoute également l'attribut data-error avec l'argument qui correspond
-    smallFirst.setAttribute("data-error", "Veuillez saisir une valeur");
-  }
-  // Au minimum 2 caracteres
-  else if (inputFirstName.value.length < 2) {
-    smallFirst.setAttribute("data-error-visible", "true");
+
+    // On ajoute a la div parent l'attribut data-error
+    // Avec la valeur que l'on souhaite en paramettre
+
     smallFirst.setAttribute(
       "data-error",
       "Veuillez saisir au minimum 2 caractères"
     );
-    // Au maximum 16 caractères
+
+    // Sinon si la valeur indiquer est supérieur ou égal à 16 caractères
   } else if (inputFirstName.value.length >= 16) {
     smallFirst.setAttribute("data-error-visible", "true");
     smallFirst.setAttribute(
@@ -119,14 +134,27 @@ const validateFirst = function (inputFirstName) {
       "Veuillez saisir un prénom plus court"
     );
   }
-  // Testing de la valeur saisie dans le champs Prénom
+
+  // On effectue un test de la valeur 'Prenom' si les conditions précedentes
+  // ne sont pas vérifiées
   else if (regexFirst.test(inputFirstName.value)) {
-    // Si la valeur passe le test de regex alors les attributs ajoutés précedement sont retirés
+    // Si la valeur passe le test de regExp
+    // alors les attributs de styles ajoutés précedement sont retirés
+
     smallFirst.removeAttribute("data-error-visible");
     smallFirst.removeAttribute("data-error");
+
+    // On retourne également la valeur de True
+    // plusque la valeur 'Prénom' passe le Test
+
     return true;
+
+    // Sinon la valeur ne passe pas le test de la regex
+    // Je demande à l'utilisateur de saisir une autre valeur
   } else {
-    // Si la valeur ne passe pas le test de la regex
+    // Dans ce cas j'ajoute les attributs de style
+    // Qui vont indiquer à l'utilisateur la démarche à suivre
+
     smallFirst.setAttribute("data-error-visible", "true");
     smallFirst.setAttribute("data-error", "Veuillez saisir une autre valeur");
   }
@@ -138,45 +166,57 @@ const validateFirst = function (inputFirstName) {
 //***********                       **********************//
 //********************************************************//
 
-// Ecoute de la modification de l'élément Nom
+// Ecoute de la modification au niveau de l'input sur le champs Nom
+
 form.last.addEventListener("input", function () {
   validateLast(this);
 });
 
 const validateLast = function (inputLastName) {
-  //Création de la RegExp pour valider le Nom
+  //Création de la RegExp qui va vérifier la valeur saisie dans le champs Nom
+
   let regexLast = new RegExp(
+    // On autorise les éléments en Majuscule
+    // On autorise les éléments en minuscule
+    // On autorise les lettres particulière
+    // On accepte les '-' mais pas les '_'
+    // On accepte les " ' " et les espaces
+    // On autorise la saisie de plusieurs fois la meme valeurs avec le ' + '
+    // On effectue une recherche de façon générale avec le ' g ' de la regExp
+
     "^[a-zA-Z 'àâçéèêëìíîïñòóôöùúûüýÿÀÁÂÇÈÉÊËÌÍÎÏÑÒÓÔÙÚÛÜÝŸ]+$",
     "g"
   );
 
-  // Modification du texte sous le champs Nom
+  // La variables smallLast va nous permettre de génerer des attributs de styles
+  // qui vont indiquer à l'utilisateur la démarche à suivre
+
   let smallLast = inputLastName.parentElement;
 
-  if (inputLastName.value.trim() == "") {
-    smallLast.setAttribute("data-error-visible", "true");
-    smallLast.setAttribute("data-error", "Veuillez saisir une valeur");
-  }
-  // Au minimum 2 caracteres
-  else if (inputLastName.value.length < 2) {
+  // Si jamais la valeur du champs est inférieur à 2 caractères
+
+  if (inputLastName.value.length < 2) {
     smallLast.setAttribute("data-error-visible", "true");
     smallLast.setAttribute(
       "data-error",
       "Veuillez saisir au minimum 2 caractères"
     );
-  } // Au maximum 16 caractères
+  } // Si jamais la valeur du champs est superieur ou égal à 16 caractère
   else if (inputLastName.value.length >= 16) {
     smallLast.setAttribute("data-error-visible", "true");
     smallLast.setAttribute("data-error", "Veuillez saisir un nom plus court");
   }
-  // Testing de la valeur saisie dans le champs Prénom
+  // Si les conditions précedentes ne sont pas verifiées
+  // On test la valeur saisie dans le champs Prénom
   else if (regexLast.test(inputLastName.value)) {
+    // Si celle si est vrai :
     smallLast.removeAttribute("data-error-visible");
     smallLast.removeAttribute("data-error");
     return true;
+    // Sinon :
   } else {
     smallLast.setAttribute("data-error-visible", "true");
-    smallLast.setAttribute("data-error", "Veuillez saisir votre nom");
+    smallLast.setAttribute("data-error", "Veuillez saisir une valeur valide");
   }
 };
 
@@ -186,32 +226,57 @@ const validateLast = function (inputLastName) {
 //***********                       **********************//
 //********************************************************//
 
-// Ecoute de la modification de l'élément E-mail
+// Ecoute au niveau de l'input du champs correspondant à la saisie de l'E-mail
+
 form.email.addEventListener("input", function () {
   validateEmail(this);
 });
 
 const validateEmail = function (inputEmail) {
-  //Création de la RegExp pour valider l'E-mail
+  //Création de la RegExp qui va vérifier la valeur de l'E-mail
+
   let regexEmail = new RegExp(
+    // On accepte en premiere Partie :
+    // Les Majuscules de A à Z
+    // Les minuscules de a à z
+    // Les Chiffres de 0 à 9
+    // Les ' . '
+    // Les ' _ '
+    // Les ' - '
+    // On peut taper plusieurs la méme valeur gràce au ' + '
+    // On accepte en seconde Partie :
+    // Un seul @
+    // Suivie de MAJUSCULES ou minuscules
+    // de A à Z et les chiffres de 0 à 9
+    // Ainsi que => ' . ' ' - ' ' _ '
+    // Cela plusieurs fois
+    // On accepte en troisième Partie :
+    // Un seul '.'
+    // Suivie des lettres en minuscules uniquement de
+    // a à z
+    // On accepte après le point de 2 lettres à 10 lettres maximum
+    // On effectue une recherche de façon général
+
     "^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$",
     "g"
   );
 
   // Modification du texte sous le champs de saisie E-mail
+  // Avec la variables smallEmail qui récupère la 'div' parent
+
   let smallEmail = inputEmail.parentElement;
 
-  // Si aucune valeur n'est saisie
-  if (inputEmail.value === "") {
-    smallEmail.setAttribute("data-error-visible", "true");
-    smallEmail.setAttribute("data-error", "Veuillez saisir une valeur");
-  }
   // Testing de la valeur saisie dans le champs Email
-  else if (regexEmail.test(inputEmail.value)) {
+  if (regexEmail.test(inputEmail.value)) {
+    // Si celle-çi est vérifier on ajoute des attributs de styles CSS
+    // Et on indique que l'adresse e-mail est valide
+
     smallEmail.removeAttribute("data-error-visible");
     smallEmail.setAttribute("data-error-visible", "false");
     smallEmail.setAttribute("data-error", "Adresse e-mail valide");
     return true;
+    // Sinon, on indique que la valeur ne respecte pas la regExp
+    // et n'a pas passée le Test
   } else {
     smallEmail.removeAttribute("data-error-visible");
     smallEmail.setAttribute("data-error-visible", "true");
