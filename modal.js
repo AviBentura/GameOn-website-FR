@@ -497,6 +497,11 @@ function validateCheck() {
     // Pour chaque cas on retire le message d'erreur
     checkboxInput.removeAttribute("data-error");
     checkboxInput.removeAttribute("data-error-visible");
+    // Création de la variable correspondant a la première valeur
+    let inputOne = document.getElementById("location1");
+    // On recupère la valeur de l'input
+    let valueOne = inputOne.value;
+    console.log(valueOne);
   } else if (btnCheck[1].checked) {
     checkboxInput.removeAttribute("data-error");
     checkboxInput.removeAttribute("data-error-visible");
