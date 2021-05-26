@@ -24,7 +24,7 @@ const formData = document.querySelectorAll(".formData");
 const toClose = document.querySelectorAll(".btn-close");
 
 //******************************************* //
-// ************** ACTION *********************//
+// ************** ACTION MODAL ***************//
 //******************************************* //
 
 // Lancement de l'évenement de la modal
@@ -43,13 +43,47 @@ function closeModal() {
   modalbg.style.display = "none";
 }
 
-//************Validation Prénom **********************//
-
-// conditions de remplissage du formulaire
+// variables rattachée au éléments du formulaire
 let form = document.querySelector("#form-registration");
 
-// Ecoute de la modification de l'élément Prénom
+//********************************************************//
+//***********                       **********************//
+//*********   ECOUTE SUR LES INPUTS    *******************//
+//***********                       **********************//
+//********************************************************//
+
+// Ecoute sur l'intégralité du formulaire sur les 'inputs'
+// Le but de cette écoute, est de vérifier si rien n'est tapé dans les champs inputs
+
+form.addEventListener("input", function () {
+  //Vérification si le champs Prénom ne contient rien
+
+  if (!first.value) {
+    first.parentElement.setAttribute("data-error-visible", "true");
+    first.parentElement.setAttribute("data-error", "Veuillez saisir votre Nom");
+  }
+
+  //Vérification si le champs Prénom ne contient rien
+
+  if (!last.value) {
+    last.parentElement.setAttribute("data-error-visible", "true");
+    last.parentElement.setAttribute(
+      "data-error",
+      "Veuillez saisir votre Prénom"
+    );
+  }
+});
+
+//********************************************************//
+//***********                       **********************//
+//*********     VALIDATION PRENOM    *********************//
+//***********                       **********************//
+//********************************************************//
+
+// Ecoute de la modification du champs correspondant au Prénom
+// Ecoute est faite sur la valeur de l'input
 form.first.addEventListener("input", function () {
+  // On renvoie vers une fonction
   validateFirst(this);
 });
 
@@ -98,7 +132,11 @@ const validateFirst = function (inputFirstName) {
   }
 };
 
-//************Validation Nom **********************//
+//********************************************************//
+//***********                       **********************//
+//*********     VALIDATION NOM       *********************//
+//***********                       **********************//
+//********************************************************//
 
 // Ecoute de la modification de l'élément Nom
 form.last.addEventListener("input", function () {
@@ -142,7 +180,11 @@ const validateLast = function (inputLastName) {
   }
 };
 
-//***************E-MAIL******************************//
+//********************************************************//
+//***********                       **********************//
+//*********     VALIDATION E-MAIL    *********************//
+//***********                       **********************//
+//********************************************************//
 
 // Ecoute de la modification de l'élément E-mail
 form.email.addEventListener("input", function () {
@@ -179,12 +221,13 @@ const validateEmail = function (inputEmail) {
 
 const filledEmail = email.parentElement;
 
-console.log(filledEmail);
-
 email.addEventListener("focusout", function () {
   if (!validateEmail.value) {
     filledEmail.setAttribute("data-error-visible", "true");
-    filledEmail.setAttribute("data-error", "Veuillez saisir une valeur");
+    filledEmail.setAttribute(
+      "data-error",
+      "Veuillez saisir votre adresse e-mail"
+    );
   }
   setTimeout(function () {
     filledEmail.removeAttribute("data-error-visible");
@@ -192,17 +235,15 @@ email.addEventListener("focusout", function () {
   }, 3000);
 });
 
-//**************DATE DE NAISSANCE********************//
+//********************************************************//
+//******                                 *****************//
+//***     VALIDATION DATE DE NAISSANCE    ****************//
+//******                                ******************//
+//********************************************************//
 
 // Ecoute de la modification de l'élément Date de Naissance
-form.birthdate.addEventListener("focusout", function () {
+form.birthdate.addEventListener("input", function () {
   validateBirth(this);
-
-  // On crée une écoute "focusout" et éxecute une fonction à réaliser sur le champs date de naissance
-  setTimeout(function () {
-    filledBirthday.removeAttribute("data-error-visible");
-    filledBirthday.setAttribute("data-error", "");
-  }, 3000);
 });
 
 // On crée une variable rataché à l'élément parent 'div'
@@ -214,8 +255,6 @@ const validateBirth = function (inputBirth) {
 
   // Extrait des composants de la date
   // Notamment l'année de naissance
-  let day = born.getDate();
-  let month = born.getMonth() + 1;
   let years = born.getFullYear();
 
   // Modification du texte sous le champs date de naissance
@@ -226,17 +265,34 @@ const validateBirth = function (inputBirth) {
     smallBirthday.setAttribute("data-error-visible", "false");
     smallBirthday.setAttribute("data-error", "Date de naissance valide");
     return true;
-    // Sinon indiqué qu'il s'agit d'une erreur
   } else {
     smallBirthday.setAttribute("data-error-visible", "true");
     smallBirthday.setAttribute(
       "data-error",
-      "Veuillez saisir votre année de naissance"
+      "Veuillez saisir une date de naissance valide"
     );
   }
 };
 
-//***************NOMBRE DE TOURNOIS******************//
+birthdate.addEventListener("focusout", function () {
+  if (!birthdate.value) {
+    birthdate.parentElement.setAttribute("data-error-visible", "true");
+    birthdate.parentElement.setAttribute(
+      "data-error",
+      "Veuillez saisir votre date de naissance"
+    );
+  }
+  if (validateBirth(form.birthdate)) {
+    birthdate.parentElement.removeAttribute("data-error-visible");
+    birthdate.parentElement.removeAttribute("data-error");
+  }
+});
+
+//********************************************************//
+//******                                 *****************//
+//***     VALIDATION NOMBRE DE TOURNOIS   ****************//
+//******                                ******************//
+//********************************************************//
 
 // Ecoute de la modification sur le champs "nombre de tournois"
 form.quantity.addEventListener("input", function () {
@@ -244,7 +300,6 @@ form.quantity.addEventListener("input", function () {
 });
 
 // Definition de la variable qui correspond à la 'div' des input => Ville
-const checkboxPreview = form.childNodes[25];
 
 const validateTournament = function (inputNumber) {
   // Modification du texte sous le champs date de naissance
@@ -252,21 +307,20 @@ const validateTournament = function (inputNumber) {
 
   // Création de la variable qui récupère l'élément 'div' des checkbox ville
   const checkboxT = document.getElementById("checkbox");
-
   // Création de la variable qui récupère l'élément le paragraphe 'Quelles villes'
   const pCheckbox = document.querySelector("p.text-label");
+  // On utilise ces variables pour appliquer la classe 'switchOff'
 
-  // Verification si la valeur n'existe pas
-  if (inputNumber.value === "") {
-    checkboxPreview.removeAttribute("data-error-visible");
-    checkboxPreview.removeAttribute("data-error");
-    // Vérification si la valeur est négative
-  } else if (inputNumber.value < 0) {
+  // Verification si la valeur est 0
+  if (inputNumber.value < 0) {
     checkboxT.classList.remove("switchOff");
     pCheckbox.classList.remove("switchOff");
 
-    checkboxPreview.removeAttribute("data-error-visible");
-    checkboxPreview.removeAttribute("data-error");
+    quantity.parentElement.setAttribute("data-error-visible", "true");
+    quantity.parentElement.setAttribute(
+      "data-error",
+      "veuillez saisir une valeur positive"
+    );
     // Vérification si la valeur est supérrieur à 99 tournois
   } else if (inputNumber.value === "0") {
     // Ajout de la classe 'switchOff' à la div parent qui contient le choix des villes
@@ -280,10 +334,13 @@ const validateTournament = function (inputNumber) {
     checkboxT.classList.remove("switchOff");
     // Suppression de la classe 'switchOff' du paragraphe qui contient le texte
     pCheckbox.classList.remove("switchOff");
-
-    checkboxPreview.removeAttribute("data-error-visible");
-    checkboxPreview.removeAttribute("data-error");
     // Si aucune des conditions remplie, retirer les propriétés CSS data-error et data-error-visible
+
+    quantity.parentElement.setAttribute("data-error-visible", "true");
+    quantity.parentElement.setAttribute(
+      "data-error",
+      "veuillez saisir une valeur inférieur"
+    );
   } else {
     checkboxT.classList.remove("switchOff");
     pCheckbox.classList.remove("switchOff");
@@ -293,42 +350,25 @@ const validateTournament = function (inputNumber) {
   }
 };
 
-quantity.addEventListener("focusout", function () {
-  quantity.parentElement.setAttribute("data-error-visible", "true");
-  quantity.parentElement.setAttribute(
-    "data-error",
-    "Veuillez saisir une valeur valide"
-  );
-  if (validateTournament(form.quantity)) {
-    return true;
-  } else if (quantity.value < 0) {
+form.quantity.addEventListener("focusout", function () {
+  if (!form.quantity.value) {
     quantity.parentElement.setAttribute("data-error-visible", "true");
     quantity.parentElement.setAttribute(
       "data-error",
-      "veuillez saisir une valeur positive"
+      "Veuillez saisir une valeur"
     );
-    checkboxPreview.removeAttribute("data-error-visible");
-    checkboxPreview.removeAttribute("data-error");
-  } else if (quantity.value > 99) {
-    quantity.parentElement.setAttribute("data-error-visible", "true");
-    quantity.parentElement.setAttribute(
-      "data-error",
-      "veuillez saisir une valeur inférieur"
-    );
-    checkboxPreview.removeAttribute("data-error-visible");
-    checkboxPreview.removeAttribute("data-error");
-  } else if (quantity.value === "0") {
+  } else {
     quantity.parentElement.removeAttribute("data-error-visible");
     quantity.parentElement.removeAttribute("data-error");
-    checkboxPreview.removeAttribute("data-error-visible");
-    checkboxPreview.removeAttribute("data-error");
-  } else if (quantity.value !== null) {
-    checkboxPreview.removeAttribute("data-error-visible");
-    checkboxPreview.removeAttribute("data-error");
   }
 });
 
-//************CHECKBOX LIEUX DES TOURNOIS***********//
+//********************************************************//
+//*************                        *******************//
+//**********     VALIDATION CHECKBOX   *******************//
+//***********    LIEUX DES TOURNOIS     ******************//
+//*************                        *******************//
+//********************************************************//
 
 const checkboxElement = document.querySelectorAll(".checkbox-label");
 
@@ -364,11 +404,16 @@ function validateCheck() {
     checkboxInput.removeAttribute("data-error-visible");
   } else {
     checkboxInput.setAttribute("data-error-visible", "true");
-    checkboxInput.setAttribute("data-error", "Veuillez saisir une valeur");
+    checkboxInput.setAttribute("data-error", "Veuillez séléctionner une ville");
   }
 }
 
-//************CHECKBOX CONDITIONS***********//
+//********************************************************//
+//*************                        *******************//
+//**********     VALIDATION CHECKBOX   *******************//
+//***********       LES CONDITIONS      ******************//
+//*************                        *******************//
+//********************************************************//
 
 checkboxNext.addEventListener("click", function () {
   validateCheck();
@@ -382,8 +427,13 @@ function valideChecked() {
     return false;
   }
 }
-//******************** C'EST PARTIE *********************************/
-//******************** BOUTON SUBMIT ********************************/
+
+//********************************************************//
+//*************                        *******************//
+//**********         C'EST PARTIE      *******************//
+//***********        BOUTON SUBMIT      ******************//
+//*************                        *******************//
+//********************************************************//
 
 form.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -396,7 +446,7 @@ function validate() {
   let inputs = document.getElementsByTagName("input");
 
   if (valideChecked(form.checkbox1) === false) {
-    error = "veuillez accepter les conditions d'utilisation";
+    error = "Veuillez accepter les conditions d'utilisation";
   }
 
   for (let i = 0; i < inputs.length; i++) {
@@ -409,7 +459,6 @@ function validate() {
     alert(error);
     return false;
   } else {
-    alert("Formulaire envoyé !");
     form.submit();
   }
 }
