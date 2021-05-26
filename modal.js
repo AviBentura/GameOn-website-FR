@@ -284,16 +284,23 @@ const validateEmail = function (inputEmail) {
   }
 };
 
+// Création de la variable d'affichage du resultat
 const filledEmail = email.parentElement;
 
+// On effectue une écoute sur l'extérieur du champs lorsque l'on sort du focus
 email.addEventListener("focusout", function () {
+  // On verifie si la valeur est null
   if (!validateEmail.value) {
+    // Dans ce cas on affiche un message d'erreur
     filledEmail.setAttribute("data-error-visible", "true");
     filledEmail.setAttribute(
       "data-error",
       "Veuillez saisir votre adresse e-mail"
     );
   }
+  // On utilise la fonction SetTimeout pour dire
+  // Au bout de 3 seconde rettirer le message d'erreur
+  // C'est également le cas si la valeur est bonne
   setTimeout(function () {
     filledEmail.removeAttribute("data-error-visible");
     filledEmail.removeAttribute("data-error");
@@ -306,7 +313,8 @@ email.addEventListener("focusout", function () {
 //******                                ******************//
 //********************************************************//
 
-// Ecoute de la modification de l'élément Date de Naissance
+// Ecoute de la modification sur l'élément Date de Naissance
+// Sur l'évenement Input
 form.birthdate.addEventListener("input", function () {
   validateBirth(this);
 });
@@ -314,6 +322,7 @@ form.birthdate.addEventListener("input", function () {
 // On crée une variable rataché à l'élément parent 'div'
 const filledBirthday = birthdate.parentElement;
 
+// Fonction éxécutée lors de l'écoute sur le champs Input
 const validateBirth = function (inputBirth) {
   // Création de la variable qui récupère la date
   let born = new Date(inputBirth.value);
@@ -326,11 +335,14 @@ const validateBirth = function (inputBirth) {
   let smallBirthday = inputBirth.parentElement;
 
   // Verification si la valeur est située entre 1930 et 2003
+  // Si la valeur est juste on afiche un message de validation
   if (years <= 2003 && years >= 1930) {
     smallBirthday.setAttribute("data-error-visible", "false");
     smallBirthday.setAttribute("data-error", "Date de naissance valide");
+    // On retourne également la valeur True
     return true;
   } else {
+    // Sinon on indique que la valeur est n'est pas valide
     smallBirthday.setAttribute("data-error-visible", "true");
     smallBirthday.setAttribute(
       "data-error",
@@ -339,7 +351,9 @@ const validateBirth = function (inputBirth) {
   }
 };
 
+// On effectue une écoute lorsque l'on sort du focus
 birthdate.addEventListener("focusout", function () {
+  // On vérifie si la valeur saisie dans le champs est null
   if (!birthdate.value) {
     birthdate.parentElement.setAttribute("data-error-visible", "true");
     birthdate.parentElement.setAttribute(
@@ -347,7 +361,9 @@ birthdate.addEventListener("focusout", function () {
       "Veuillez saisir votre date de naissance"
     );
   }
+  // Si la valeur est vrai alors
   if (validateBirth(form.birthdate)) {
+    // On retire le message d'erreur
     birthdate.parentElement.removeAttribute("data-error-visible");
     birthdate.parentElement.removeAttribute("data-error");
   }
@@ -364,64 +380,86 @@ form.quantity.addEventListener("input", function () {
   validateTournament(this);
 });
 
-// Definition de la variable qui correspond à la 'div' des input => Ville
-
+// Fonction éxécutée à l'écoute de l'input Nombre de tournois
 const validateTournament = function (inputNumber) {
-  // Modification du texte sous le champs date de naissance
+  // Definition de la variable qui correspond à la 'div' des input => Ville
   const smallTournament = inputNumber.parentElement;
 
   // Création de la variable qui récupère l'élément 'div' des checkbox ville
   const checkboxT = document.getElementById("checkbox");
+
   // Création de la variable qui récupère l'élément le paragraphe 'Quelles villes'
   const pCheckbox = document.querySelector("p.text-label");
-  // On utilise ces variables pour appliquer la classe 'switchOff'
 
-  // Verification si la valeur est 0
+  // On utilise ces variables pour appliquer la classe 'switchOff'
+  // pCheckbox et checkboxT
+  // La classe 'switchOff' va masquer les villes
+
+  // Verification si la valeur saisie est inférieur à 0
+  // Sois négative
   if (inputNumber.value < 0) {
+    // Dans ce cas on enleve le masque des éléments
     checkboxT.classList.remove("switchOff");
     pCheckbox.classList.remove("switchOff");
 
+    // On ajoute un texte d'erreur correspondant
     quantity.parentElement.setAttribute("data-error-visible", "true");
     quantity.parentElement.setAttribute(
       "data-error",
       "veuillez saisir une valeur positive"
     );
-    // Vérification si la valeur est supérrieur à 99 tournois
+    // Si jamais la valeur est égal à 0
   } else if (inputNumber.value === "0") {
     // Ajout de la classe 'switchOff' à la div parent qui contient le choix des villes
+    // Dans ce cas on masques les élements
     checkboxT.classList.add("switchOff");
     // Ajout de la classe 'switchOff' au paragraphe qui contient le texte 'Quelles villes'
+    // On masque également 'quelle ville'
     pCheckbox.classList.add("switchOff");
 
     // Si la valeur est supérieur à 99
+    // La valeur 99 est accepté donc si uniquement supérieur
   } else if (inputNumber.value > 99) {
     // Suppression de la classe 'switchOff' de l'élément div
+    // On enleve le masque si il a été appliqué
     checkboxT.classList.remove("switchOff");
     // Suppression de la classe 'switchOff' du paragraphe qui contient le texte
     pCheckbox.classList.remove("switchOff");
-    // Si aucune des conditions remplie, retirer les propriétés CSS data-error et data-error-visible
 
+    // On ajoute un message d'erreur
+    // Indiquant de saisir une valeur inférieur
     quantity.parentElement.setAttribute("data-error-visible", "true");
     quantity.parentElement.setAttribute(
       "data-error",
       "veuillez saisir une valeur inférieur"
     );
+    // Sinon on retire 'switchOff'
   } else {
     checkboxT.classList.remove("switchOff");
     pCheckbox.classList.remove("switchOff");
+    // On retire également le message d'erreur
     smallTournament.removeAttribute("data-error-visible");
     smallTournament.removeAttribute("data-error");
+    // On retourne la valeur vrai plusqu'aucune des conditions d'erreur n'est remplie
+    // La valeur est donc juste
     return true;
   }
 };
 
+// On effectue une écoute à la sortie du focus sur le champs 'nombre de tournois'
+
 form.quantity.addEventListener("focusout", function () {
+  // Si rien n'est saisie dans le champs
   if (!form.quantity.value) {
+    // On affiche un message d'erreur
     quantity.parentElement.setAttribute("data-error-visible", "true");
     quantity.parentElement.setAttribute(
       "data-error",
       "Veuillez saisir une valeur"
     );
+    // Sinon on retire le message d'erreur
+    // Que l'on remettra si une des conditions précedentes est vérifier
+    // Ou si la valeur indiqué est juste
   } else {
     quantity.parentElement.removeAttribute("data-error-visible");
     quantity.parentElement.removeAttribute("data-error");
@@ -435,21 +473,28 @@ form.quantity.addEventListener("focusout", function () {
 //*************                        *******************//
 //********************************************************//
 
-const checkboxElement = document.querySelectorAll(".checkbox-label");
-
+// Création de la variable correspondant à la 'div' qui contient les input radio
 const checkboxInput = document.getElementById("checkbox");
 
+// Crétion de la variable correspondant à la 'div' avec la checkbox
+// Conditions générales d'utilisation
 const checkboxNext = checkboxInput.nextElementSibling;
 
-// Récupération des données des elements checkbox à partir d'une fonction et de conditions
+// Ecoute au click  sur le formulaire
+// Si click on éxécute la fonction validateCheck()
 form.addEventListener("click", function () {
   validateCheck(this);
 });
 
 // Création d'une fonction qui regroupe tout les elements des checkbox
 function validateCheck() {
+  // Création de la variable qui regroupe tout les éléments qui ont pour classe 'checkbox-input'
+  // Içi correspondant aux checkbox villes
   let btnCheck = document.getElementsByClassName("checkbox-input");
+  // Comme la variable, regroupe un tableau de valeur
+  // On indique dans la condition la valeur de l'index correspondant
   if (btnCheck[0].checked) {
+    // Pour chaque cas on retire le message d'erreur
     checkboxInput.removeAttribute("data-error");
     checkboxInput.removeAttribute("data-error-visible");
   } else if (btnCheck[1].checked) {
@@ -468,6 +513,7 @@ function validateCheck() {
     checkboxInput.removeAttribute("data-error");
     checkboxInput.removeAttribute("data-error-visible");
   } else {
+    // Sinon on affiche le message d'erreur de séléctionner une ville
     checkboxInput.setAttribute("data-error-visible", "true");
     checkboxInput.setAttribute("data-error", "Veuillez séléctionner une ville");
   }
@@ -480,15 +526,22 @@ function validateCheck() {
 //*************                        *******************//
 //********************************************************//
 
+// Ecoute au click sur la 'div' qui contient le checkbox
+// Les conditions d'utilisation
 checkboxNext.addEventListener("click", function () {
+  //On éxécute la fonction validateCheck()
   validateCheck();
 });
 
 function valideChecked() {
+  // Création de la variable qui récupére l'input 'conditions d'utilisations'
   const btnChecked = document.getElementById("checkbox1");
+  // Si la variable est checked (actionnée)
   if (btnChecked.checked) {
+    // On retourne la valeur vrai que l'on va réutiliser plus tard
     return true;
   } else {
+    // Sinon on retourne faux
     return false;
   }
 }
@@ -500,29 +553,50 @@ function valideChecked() {
 //*************                        *******************//
 //********************************************************//
 
+// Ecoute sur le formulaire sur l'élément 'submit'
+// On indique dans la fonction callback un evenement avec la valeur 'e' en parametre
 form.addEventListener("submit", function (e) {
+  // Graçe à la dotation et l'appel du parametre 'e'
+  // On arrete le fonctionnement par defaut de 'submit' qui est d'envoyé le formulaire
   e.preventDefault();
+  // Pour retourner la valeur de valide
+  // Inscrit coté HTML comme valeur à retourner
   return validate();
 });
 
+// Définition de la fonction validate()
 function validate() {
+  // On crée une variable 'error' qui va regrouper les messages d'erreur
   let error;
 
+  // On crée la variable qui regroupe tout les inputs du formulaire
   let inputs = document.getElementsByTagName("input");
 
+  // Si jamais la fonction validateChecked indique la valeur false
+  // Fonction qui va retourner si les conditions d'utilisations sont checked ou pas
   if (valideChecked(form.checkbox1) === false) {
+    // Si ce n'est pas le cas la variable 'error' indique un message d'erreur
     error = "Veuillez accepter les conditions d'utilisation";
   }
 
+  // On crée une boucle for qui dit que pour chaque élément de la variable 'inputs'
+  // Allant de la valeur du tableau de valeur [0] au dernier [i] en incrementant de 1
+  // à chaque fois
   for (let i = 0; i < inputs.length; i++) {
+    // Si jamais la valeur de l'input en question est null
     if (!inputs[i].value) {
+      // On affiche le message suivant
       error = "Veuillez renseigner tous les champs";
+      // On effectue un break pour que éviter que la boucle ne se repete en permanence
       break;
     }
   }
+  // On dit que si 'error' est vérifier, donc qu'il y a une erreur
   if (error) {
+    // On affiche un pop-up avec le message contenue dans 'error'
     alert(error);
     return false;
+    // Sinon on demande l'envoie du formulaire
   } else {
     form.submit();
   }
