@@ -298,6 +298,10 @@ email.addEventListener("focusout", function () {
       "Veuillez saisir votre adresse e-mail"
     );
   }
+  if (validateEmail(form.email)) {
+    filledEmail.removeAttribute("data-error-visible");
+    filledEmail.removeAttribute("data-error");
+  }
   // On utilise la fonction SetTimeout pour dire
   // Au bout de 3 seconde rettirer le message d'erreur
   // C'est également le cas si la valeur est bonne
@@ -346,22 +350,15 @@ const validateBirth = function (inputBirth) {
     smallBirthday.setAttribute("data-error-visible", "true");
     smallBirthday.setAttribute(
       "data-error",
-      "Veuillez saisir une date de naissance valide"
+      "Veuillez saisir votre date de naissance"
     );
   }
 };
 
 // On effectue une écoute lorsque l'on sort du focus
 birthdate.addEventListener("focusout", function () {
-  // On vérifie si la valeur saisie dans le champs est null
-  if (!birthdate.value) {
-    birthdate.parentElement.setAttribute("data-error-visible", "true");
-    birthdate.parentElement.setAttribute(
-      "data-error",
-      "Veuillez saisir votre date de naissance"
-    );
-  }
   // Si la valeur est vrai alors
+  // On retire le message de validation
   if (validateBirth(form.birthdate)) {
     // On retire le message d'erreur
     birthdate.parentElement.removeAttribute("data-error-visible");
@@ -457,12 +454,6 @@ form.quantity.addEventListener("focusout", function () {
       "data-error",
       "Veuillez saisir une valeur"
     );
-    // Sinon on retire le message d'erreur
-    // Que l'on remettra si une des conditions précedentes est vérifier
-    // Ou si la valeur indiqué est juste
-  } else {
-    quantity.parentElement.removeAttribute("data-error-visible");
-    quantity.parentElement.removeAttribute("data-error");
   }
 });
 
