@@ -15,7 +15,6 @@ body {
   margin: 0;
   display: flex;
   flex-direction: column;
-  /*background-image: url("background.png");*/
   font-family: var(--font-default);
   font-size: 18px;
   max-width: 1300px;
@@ -95,7 +94,6 @@ a span {
   .topnav.responsive {
     position: relative;
     z-index: 2;
-    /*animation: open 4s forwards;*/
     transition: width 1.4s;
   }
   .topnav.responsive .icon {
@@ -113,6 +111,12 @@ a span {
   }
   .hero-section > .hero-content::after {
     right: -40px;
+  }
+}
+
+@media screen and (min-width: 920px) {
+  .bground {
+    background-color: rgba(26, 39, 156, 0.4);
   }
 }
 
@@ -216,7 +220,6 @@ main {
   height: 100%;
   width: 100%;
   overflow: auto;
-  background-color: rgba(26, 39, 156, 0.4);
 }
 
 .content {
@@ -293,16 +296,7 @@ input {
   opacity: 0;
   height: 20px;
 }
-/*input::after {
-  content: attr(data-error);
-  font-size: 0.4em;
-  color: red;
-}
-input[data-error]::after {
-  content: attr(data-error);
-  font-size: 0.4em;
-  color: green;
-}*/
+
 .checkbox-label,
 .checkbox2-label {
   position: relative;
@@ -394,31 +388,39 @@ input[data-error]::after {
 .btn-close:after {
   transform: rotate(-45deg);
 }
-/*.close {
-  position: absolute;
-  right: 15px;
-  top: 15px;
-  width: 32px;
-  height: 32px;
-  opacity: 1;
-  cursor: pointer;
-  transform: scale(0.7);
+.modal-submit {
+  margin: 5% auto;
+  width: 100%;
+  max-width: 500px;
+  background: #232323;
+  border-radius: 10px;
+  color: #fff;
+  padding-top: 10px;
+  display: none;
+  z-index: -1;
+  justify-content: center;
+  flex-direction: column;
 }
-.close:before,
-.close:after {
-  position: absolute;
-  left: 15px;
-  content: " ";
-  height: 33px;
-  width: 3px;
-  background-color: #fff;
+.text-thanks {
+  font-family: var(--font-default);
+  font-size: 36px;
+  font-weight: 500;
+  text-align: center;
+  padding-top: 212px;
+  margin: 0 53px;
 }
-.close:before {
-  transform: rotate(45deg);
+.bground-submit {
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
 }
-.close:after {
-  transform: rotate(-45deg);
-}*/
+
+.modal-submit > .space {
+  margin-top: 240px;
+  margin-bottom: 21px;
+}
+
 .btn-submit,
 .btn-signup {
   background: #fe142f;
@@ -518,7 +520,6 @@ input[data-error]::after {
   color: #fff;
   position: relative;
   text-align: left;
-  /*min-width: 424px;*/
 }
 .hero-content::after {
   content: "";
@@ -612,7 +613,7 @@ footer {
   }
   .hero-text {
     width: unset;
-    font-size: 1rem;
+    font-size: 1.2rem;
     margin-top: 45px;
   }
   .hero-img img {
@@ -663,12 +664,3 @@ footer {
     opacity: 1;
   }
 }
-
-/*@keyframes open {
-  from {
-    transform: translate(0, 0);
-  }
-  to {
-    transform: translate(24px, 0);
-  }
-}*/
