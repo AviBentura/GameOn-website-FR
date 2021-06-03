@@ -557,6 +557,7 @@ form.addEventListener("submit", function (e) {
   e.preventDefault();
   // Pour retourner la valeur de valide
   // Inscrit coté HTML comme valeur à retourner
+
   return validate();
 });
 
@@ -591,9 +592,51 @@ function validate() {
   if (error) {
     // On affiche un pop-up avec le message contenue dans 'error'
     alert(error);
+
     return false;
-    // Sinon on demande l'envoie du formulaire
+    // Sinon on demande l'envoie du formulaire et l'éxécution du contenue
+    // de la condition "else"
   } else {
-    form.submit();
+    // Création de la variable qui récupère la 'div' qui va s'afficher
+    // Lorsque l'envoie du formulaire est vérifié
+    const modalSubmit = document.querySelector(".modal-submit");
+
+    // Création de la variable qui encadre cette 'div' pour pouvoir
+    // lui appliquer des éléments de styles
+    const bgSubmit = document.querySelector(".bground-submit");
+
+    // On demande de placer l'attribut 'display' du formulaire
+    // En valeur 'none' afin de cacher l'élément de la page
+    modalbg.style.display = "none";
+    // On demande à contrario d'afficher la 'div' contenant le message
+    // de remerciement à partir de la propriété 'display'
+    modalSubmit.style.display = "flex";
+    // On place le container en index supérieur aux autres éléments de
+    // La page afin qu'aucun autres éléments ne soit cliquables et que
+    // L'afichage de la 'div' contenant le message s'afiche au premier plan
+    bgSubmit.style.zIndex = 2;
+    // On demande de passer la position de la 'div' en élément fixe
+    bgSubmit.style.position = "fixed";
   }
 }
+
+// On crée une variable qui regroupe la 'div' message de remerciement
+// Mais cette fois çi pas en local dans la condition
+const modalSubmitAfter = document.querySelector(".modal-submit");
+
+// On crée la variable qui va étre ratacher à l'élement bouton 'fermer'
+// De ce message de remerciement
+const btnSoumis = document.getElementById("soumis");
+
+// On effectue une écoute sur ce bouton afin de récupérer l'évenement
+// Au click de l'utilisateur
+btnSoumis.addEventListener("click", function () {
+  // On dit dans la fonction callback de placer cette 'div' avec le message
+  // En 'display' 'none' afin qu'elle disparaisse de l'écran
+  modalSubmitAfter.style.display = "none";
+  // On effectue l'envoie du formulaire
+  // A noter que en fonction de la technologie utilisée pour récuperer
+  // Les données saisie l'envoie du formulaire se ferra en amont du message
+  // de remerciement
+  form.submit();
+});
