@@ -431,6 +431,20 @@ const validateTournament = function (inputNumber) {
       "veuillez saisir une valeur inférieur"
     );
     // Sinon on retire 'switchOff'
+  } else if (inputNumber.value.length > 2 || inputNumber.value === "00") {
+    // Suppression de la classe 'switchOff' de l'élément div
+    // On enleve le masque si il a été appliqué
+    checkboxT.classList.remove("switchOff");
+    // Suppression de la classe 'switchOff' du paragraphe qui contient le texte
+    pCheckbox.classList.remove("switchOff");
+    // On ajoute un message d'erreur
+    // Indiquant de saisir une valeur inférieur
+    quantity.parentElement.setAttribute("data-error-visible", "true");
+    quantity.parentElement.setAttribute(
+      "data-error",
+      "veuillez saisir une valeur acceptée"
+    );
+    // Sinon on retire 'switchOff'
   } else {
     checkboxT.classList.remove("switchOff");
     pCheckbox.classList.remove("switchOff");
