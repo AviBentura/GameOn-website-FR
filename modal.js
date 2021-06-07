@@ -510,18 +510,34 @@ function validateCheck() {
   } else if (btnCheck[1].checked) {
     checkboxInput.removeAttribute("data-error");
     checkboxInput.removeAttribute("data-error-visible");
+    let inputOne = document.getElementById("location2");
+    // On recupère la valeur de l'input
+    let valueOne = inputOne.value;
+    console.log(valueOne);
   } else if (btnCheck[2].checked) {
     checkboxInput.removeAttribute("data-error");
     checkboxInput.removeAttribute("data-error-visible");
+    let inputTwo = document.getElementById("location3");
+    let valueTwo = inputTwo.value;
+    console.log(valueTwo);
   } else if (btnCheck[3].checked) {
     checkboxInput.removeAttribute("data-error");
     checkboxInput.removeAttribute("data-error-visible");
+    let inputTre = document.getElementById("location4");
+    let valueTre = inputTre.value;
+    console.log(valueTre);
   } else if (btnCheck[4].checked) {
     checkboxInput.removeAttribute("data-error");
     checkboxInput.removeAttribute("data-error-visible");
+    let inputFor = document.getElementById("location5");
+    let valueFor = inputFor.value;
+    console.log(valueFor);
   } else if (btnCheck[5].checked) {
     checkboxInput.removeAttribute("data-error");
     checkboxInput.removeAttribute("data-error-visible");
+    let inputFive = document.getElementById("location6");
+    let valueFive = inputFive.value;
+    console.log(valueFive);
   } else {
     // Sinon on affiche le message d'erreur de séléctionner une ville
     checkboxInput.setAttribute("data-error-visible", "true");
